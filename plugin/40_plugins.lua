@@ -155,7 +155,14 @@ end)
 
 -- Colorscheme ================================================================
 
+-- Conditionally fall back to catppuccin if a generated theme wasn't added.
 MiniDeps.now(function()
-	add("catppuccin/nvim")
-	vim.cmd("color catppuccin")
+	local function generated()
+		vim.cmd.colorscheme("generated")
+	end
+	local function fallback()
+		add("catppuccin/nvim")
+		vim.cmd.colorscheme("catppuccin")
+	end
+	xpcall(generated, fallback)
 end)
